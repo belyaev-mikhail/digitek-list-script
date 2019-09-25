@@ -1,0 +1,10 @@
+{
+  "timeZone": "Africa/Nairobi",
+  "dependencies": {
+  },
+  "webapp": {
+    "access": "ANYONE_ANONYMOUS",
+    "executeAs": "USER_DEPLOYING"
+  },
+  "exceptionLogging": "STACKDRIVER"
+}
