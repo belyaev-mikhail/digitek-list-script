@@ -3,6 +3,8 @@ import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import tl = require("node-telegram-bot-api");
 import Message = tl.Message;
 
+declare function shlex(input: string): string[];
+
 function getSpreadsheetUrl() {
   return SpreadsheetApp.getActive().getUrl()
 }
@@ -110,8 +112,8 @@ function sendText(id,text) {
   Logger.log(response.getContentText());
 }
 
-function sendPhoto(id,url,caption) {
-  var url = telegramUrl + "/sendPhoto?chat_id=" + id + "&photo=" + url + "&caption=" + encodeURI(caption);
+function sendPhoto(id,addr,caption) {
+  var url = telegramUrl + "/sendPhoto?chat_id=" + id + "&photo=" + addr + "&caption=" + encodeURI(caption);
   var response = UrlFetchApp.fetch(url);
   Logger.log(response.getContentText());
 }
