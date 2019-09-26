@@ -3,8 +3,8 @@ import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import gas = GoogleAppsScript;
 import tl = require("node-telegram-bot-api");
 import Message = tl.Message;
+import shlex from "./shlex";
 
-declare function shlex(input: string): string[];
 
 function getSpreadsheetUrl() {
   return SpreadsheetApp.getActive().getUrl()

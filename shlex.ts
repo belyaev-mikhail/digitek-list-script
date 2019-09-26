@@ -4,15 +4,15 @@
  * Split the spring by spaces with support of quoting strings with spaces and escaping any symbol.
  *
  */
-function shlex(input) {
-    var token = "";
-    var res = [];
-    var state = {
-      inQuotes: false,
-      escaped: false,
-      ptr: 0
+export default function shlex(input: string): string[] {
+    let token = "";
+    let res = [];
+    let state = {
+        inQuotes: false,
+        escaped: false,
+        ptr: 0
     };
-    var currentChar;
+    let currentChar;
 
     function flushToken() {
         if (token)
