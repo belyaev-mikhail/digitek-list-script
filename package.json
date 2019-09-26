@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "description": "Digitek lists Google Application Scripts",
   "scripts": {
-    "push": "clasp push",
-    "deploy": "clasp deploy -i ***REMOVED***"
+    "push": "node_modules/.bin/clasp push",
+    "deploy": "node_modules/.bin/clasp deploy -i ***REMOVED***"
   },
   "private": true,
   "devDependencies": {
