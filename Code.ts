@@ -96,31 +96,31 @@ function insertStuff(who: string, what: string, howmuch: number) {
 // telegram stuff!
 
 var token = '***REMOVED***';
-var telegramUrl = 'https://api.telegram.org/bot' + token;
+var telegramUrl = `https://api.telegram.org/bot${token}`;
 var webAppUrl = 'https://script.google.com/macros/s/***REMOVED***/exec';
 
 var ssId = "***REMOVED***";
 
 function getMe() {
-  var url = telegramUrl + "/getMe";
+  var url = `${telegramUrl}/getMe`;
   var response = UrlFetchApp.fetch(url);
   Logger.log(response.getContentText());
 }
 
 function setWebhook() {
-  var url = telegramUrl + "/setWebhook?url=" + webAppUrl;
+  var url = `${telegramUrl}/setWebhook?url=${webAppUrl}`;
   var response = UrlFetchApp.fetch(url);
   Logger.log(response.getContentText());
 }
 
-function sendText(id,text) {
-  var url = telegramUrl + "/sendMessage?chat_id=" + id + "&text=" + encodeURI(text);
+function sendText(id: number, text: string) {
+  var url = `${telegramUrl}/sendMessage?chat_id=${id}&text=${encodeURI(text)}`;
   var response = UrlFetchApp.fetch(url);
   Logger.log(response.getContentText());
 }
 
-function sendPhoto(id,addr,caption) {
-  var url = telegramUrl + "/sendPhoto?chat_id=" + id + "&photo=" + addr + "&caption=" + encodeURI(caption);
+function sendPhoto(id: number, addr: string, caption: string) {
+  var url = `${telegramUrl}/sendPhoto?chat_id=${id}&photo=${addr}&caption=${encodeURI(caption)}`;
   var response = UrlFetchApp.fetch(url);
   Logger.log(response.getContentText());
 }
@@ -139,7 +139,7 @@ function doPost(e) {
 
 function validateInt(s: string): number {
     let p = parseInt(s, 10);
-    if(p != p || p < 0) throw new Error(`${s} is not a positive integer`)
+    if(p != p || p < 0) throw new Error(`${s} is not a positive integer`);
     return p
 }
 
@@ -154,13 +154,13 @@ function handleMessage(m: Message) {
 
   try {
     if (trimHash(text) === getSpreadsheetUrl()) {
-      PropertiesService.getScriptProperties().setProperty("telegramid#" + userId, UNKNOWN)
+      PropertiesService.getScriptProperties().setProperty(`telegramid#${userId}`, UNKNOWN)
       sendText(id, "Запомнил. Добавляй записи.");
       return
     }
 
     var splt = shlex(text);
-    var whoAmI = PropertiesService.getScriptProperties().getProperty("telegramid#" + userId);
+    var whoAmI = PropertiesService.getScriptProperties().getProperty(`telegramid#${userId}`);
 
     if(splt.length < 2) {
       sendText(id, "Команда выглядит так: <кто> <что> <почём>");
@@ -177,7 +177,7 @@ function handleMessage(m: Message) {
         sendText(id, "Кто ты? =(\nКоманда выглядит так: <кто> <что> <почём>");
         return;
       }
-      sendText(id,"Понято, вставляю " + whoAmI + " " + splt[0] + " " + splt[1]);
+      sendText(id,`Понято, вставляю ${whoAmI} ${splt[0]} ${splt[1]}`);
       insertStuff(whoAmI, splt[0], validateInt(splt[1]));
     } else {
       whoAmI = splt[0];
