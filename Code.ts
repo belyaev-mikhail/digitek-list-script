@@ -1,5 +1,8 @@
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 
+import tl = require("node-telegram-bot-api");
+import Message = tl.Message;
+
 function getSpreadsheetUrl() {
   return SpreadsheetApp.getActive().getUrl()
 }
@@ -14,16 +17,16 @@ function formatDate(date) {
 }
 
 function createNextDList() {
-  var sheet = SpreadsheetApp.getActiveSheet()
-  var newListName = formatDate(new Date())
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var newListName = formatDate(new Date());
 
   if (SpreadsheetApp.getActiveSpreadsheet().getSheetByName(newListName) != null) return;
 
-  var newSheet = sheet.copyTo(SpreadsheetApp.getActiveSpreadsheet()).setName(newListName)
+  var newSheet = sheet.copyTo(SpreadsheetApp.getActiveSpreadsheet()).setName(newListName);
   // remove all the actual records
-  newSheet.getRange("A2:D44").clearContent()
-  newSheet.getRange("L45").setValue(0)
-  newSheet.getRange("M45").setFormula("'" + sheet.getName() + "'!N45")
+  newSheet.getRange("A2:D44").clearContent();
+  newSheet.getRange("L45").setValue(0);
+  newSheet.getRange("M45").setFormula("'" + sheet.getName() + "'!N45");
 
   updateSummary()
   // we could protect the previous sheet and activate the new one here, but it may be inconvenient to use
@@ -37,7 +40,7 @@ function onEdit(e) {
   // write date to column B if anything is edited in the same row and column B is empty
   if(2 <= e.range.getRow() && e.range.getRow() <= 44 &&
     1 <= e.range.getColumn() && e.range.getColumn() <= 4 && e.range.getColumn() != 2) {
-      var dateCell = e.range.getSheet().getRange(e.range.getRow(), 2)
+      var dateCell = e.range.getSheet().getRange(e.range.getRow(), 2);
       if(!dateCell.getValue()) dateCell.setValue(new Date())
     }
   // create next page if row 44 is fully filled
@@ -47,11 +50,11 @@ function onEdit(e) {
 }
 
 function updateSummary() {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet()
-  var summary = sheet.getSheetByName('Summary')
-  var others = sheet.getSheets().filter(function (it) { return it.getName() !== summary.getName() })
+  var sheet = SpreadsheetApp.getActiveSpreadsheet();
+  var summary = sheet.getSheetByName('Summary');
+  var others = sheet.getSheets().filter(it => it.getName() !== summary.getName());
 
-  var formula = "SORT({" + others.map(function(it){ return "'" + it.getName() + "'!A2:D44" }).join("; ") + "}; 2; TRUE)"
+  var formula = `SORT({${others.map(it => `'${it.getName()}'!A2:D44`).join("; ")}}; 2; TRUE)`;
 
   summary.getRange("A2:A2").getCell(1,1).setFormula(formula)
 }
@@ -61,14 +64,14 @@ function getLastSheet() {
   for (const it of SpreadsheetApp.getActiveSpreadsheet().getSheets()) {
     if(it.getRange("A44").isBlank()) result = it
   }
-  Logger.log(result.getName())
+  Logger.log(result.getName());
   return result
 }
 
 function getLastRow() {
-  var currentSheet = getLastSheet()
+  var currentSheet = getLastSheet();
   var listArea = currentSheet.getRange("A2:A44");
-  var i
+  var i;
   for(i = 1; i <= listArea.getHeight(); ++i) {
     if(listArea.getCell(i, 1).isBlank()) return currentSheet.getRange("A" + (i + 1) + ":D" + (i + 1))
   }
@@ -77,7 +80,7 @@ function getLastRow() {
 
 function insertStuff(who, what, howmuch) {
   var range = getLastRow();
-  range.setValues([[who, new Date(), what, howmuch]])
+  range.setValues([[who, new Date(), what, howmuch]]);
   onEdit({ range: range, value: "PLACEHOLDER" })
 }
 
@@ -118,14 +121,14 @@ function doGet(e) {
 }
 
 var UNKNOWN = "__UNKNOWN_USER__";
-var WHO_ARE_YOU = "https://i.imgur.com/pZSYRRW.jpg"
+var WHO_ARE_YOU = "https://i.imgur.com/pZSYRRW.jpg";
 
 function doPost(e) {
-  var data = JSON.parse(e.postData.contents);
+  var data = JSON.parse(e.postData.contents) as tl.Update;
   if(data.message) handleMessage(data.message); // there are non-message updates at hooks
 }
 
-function handleMessage(m) {
+function handleMessage(m: Message) {
   var text = m.text;
   var id = m.chat.id;
   var userId = m.from.id;
@@ -162,9 +165,9 @@ function handleMessage(m) {
       sendText(id,"Понято, вставляю " + whoAmI + " " + splt[0] + " " + splt[1]);
       insertStuff(whoAmI, splt[0], splt[1]);
     } else {
-      whoAmI = splt[0]
-      PropertiesService.getScriptProperties().setProperty("telegramid#" + userId, whoAmI)
-      sendText(id,"Понято, вставляю " + whoAmI + " " + splt[1] + " " + splt[2]);
+      whoAmI = splt[0];
+      PropertiesService.getScriptProperties().setProperty(`telegramid#${userId}`, whoAmI);
+      sendText(id,`Понято, вставляю ${whoAmI} ${splt[1]} ${splt[2]}`);
       insertStuff(whoAmI, splt[1], splt[2]);
     }
 
