@@ -4,7 +4,7 @@
   "description": "Digitek lists Google Application Scripts",
   "scripts": {
     "push": "clasp push",
-    "deploy": "clasp deploy -i AKfycbyRSMVwxMkfi7-Wvyy2crjvwbuzKANXF76x2Q95im0R"
+    "deploy": "clasp deploy -i ***REMOVED***"
   },
   "private": true,
   "devDependencies": {
