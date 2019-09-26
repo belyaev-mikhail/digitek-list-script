@@ -1,9 +1,10 @@
-import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
+import tl = require("node-telegram-bot-api");
 
 import gas = GoogleAppsScript;
-import tl = require("node-telegram-bot-api");
+import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import Message = tl.Message;
 import shlex from "./shlex";
+import {BOT_TOKEN, SCRIPT_ID} from "./secrets";
 
 
 function getSpreadsheetUrl() {
@@ -95,11 +96,8 @@ function insertStuff(who: string, what: string, howmuch: number) {
 
 // telegram stuff!
 
-var token = '***REMOVED***';
-var telegramUrl = `https://api.telegram.org/bot${token}`;
-var webAppUrl = 'https://script.google.com/macros/s/***REMOVED***/exec';
-
-var ssId = "***REMOVED***";
+var telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}`;
+var webAppUrl = `https://script.google.com/macros/s/${SCRIPT_ID}/exec`;
 
 function getMe() {
   var url = `${telegramUrl}/getMe`;
