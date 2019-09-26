@@ -1,5 +1,6 @@
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 
+import gas = GoogleAppsScript;
 import tl = require("node-telegram-bot-api");
 import Message = tl.Message;
 
@@ -9,7 +10,7 @@ function getSpreadsheetUrl() {
   return SpreadsheetApp.getActive().getUrl()
 }
 
-function trimHash(url) {
+function trimHash(url: string) {
   // TODO: Is there a proper way to do it???
   return url.split("#")[0];
 }
@@ -34,8 +35,14 @@ function createNextDList() {
   // we could protect the previous sheet and activate the new one here, but it may be inconvenient to use
 }
 
+interface SpreadsheetEdit {
+    value: any,
+    oldValue?: any,
+    range: gas.Spreadsheet.Range
+}
+
 // onEdit is a global trigger that's invoked on every edit
-function onEdit(e) {
+function onEdit(e: SpreadsheetEdit) {
   if (!e.value) return; // do not trigger on delete
   if (e.oldValue) return; // do not trigger on typo edits
 
@@ -80,7 +87,7 @@ function getLastRow() {
   return undefined;
 }
 
-function insertStuff(who, what, howmuch) {
+function insertStuff(who: string, what: string, howmuch: number) {
   var range = getLastRow();
   range.setValues([[who, new Date(), what, howmuch]]);
   onEdit({ range: range, value: "PLACEHOLDER" })
@@ -92,7 +99,7 @@ var token = '***REMOVED***';
 var telegramUrl = 'https://api.telegram.org/bot' + token;
 var webAppUrl = 'https://script.google.com/macros/s/***REMOVED***/exec';
 
-var ssId = "***REMOVED***"
+var ssId = "***REMOVED***";
 
 function getMe() {
   var url = telegramUrl + "/getMe";
@@ -130,6 +137,12 @@ function doPost(e) {
   if(data.message) handleMessage(data.message); // there are non-message updates at hooks
 }
 
+function validateInt(s: string): number {
+    let p = parseInt(s, 10);
+    if(p != p || p < 0) throw new Error(`${s} is not a positive integer`)
+    return p
+}
+
 function handleMessage(m: Message) {
   var text = m.text;
   var id = m.chat.id;
@@ -146,7 +159,7 @@ function handleMessage(m: Message) {
       return
     }
 
-    var splt = shlex(text)
+    var splt = shlex(text);
     var whoAmI = PropertiesService.getScriptProperties().getProperty("telegramid#" + userId);
 
     if(splt.length < 2) {
@@ -165,12 +178,12 @@ function handleMessage(m: Message) {
         return;
       }
       sendText(id,"Понято, вставляю " + whoAmI + " " + splt[0] + " " + splt[1]);
-      insertStuff(whoAmI, splt[0], splt[1]);
+      insertStuff(whoAmI, splt[0], validateInt(splt[1]));
     } else {
       whoAmI = splt[0];
       PropertiesService.getScriptProperties().setProperty(`telegramid#${userId}`, whoAmI);
       sendText(id,`Понято, вставляю ${whoAmI} ${splt[1]} ${splt[2]}`);
-      insertStuff(whoAmI, splt[1], splt[2]);
+      insertStuff(whoAmI, splt[1], validateInt(splt[2]));
     }
 
   } catch(ex) {
