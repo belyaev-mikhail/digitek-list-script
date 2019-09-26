@@ -2,3 +2,4 @@
 /.node
 /.idea
 yarn-error.log
+secrets.ts
