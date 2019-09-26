@@ -2,6 +2,8 @@
 
 set -e
 
+. secrets.sh
+
 ./nodew --version > /dev/null # Ensuring installed node
 
 . "$(dirname "${BASH_SOURCE[0]}")/wrappers.conf"
