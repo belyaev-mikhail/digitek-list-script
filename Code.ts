@@ -126,7 +126,7 @@ function sendPhoto(id: number, addr: string, caption: string) {
 }
 
 function doGet(e) {
-  return HtmlService.createHtmlOutput("Digitek list, alive and standing");
+  return HtmlService.createHtmlOutput("Digitek list, alive and standing. Hello!");
 }
 
 var UNKNOWN = "__UNKNOWN_USER__";

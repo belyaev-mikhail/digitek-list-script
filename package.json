@@ -1,0 +1,17 @@
+{
+  "name": "digitek-lists",
+  "version": "0.1.0",
+  "description": "Digitek lists Google Application Scripts",
+  "scripts": {
+    "push": "clasp push",
+    "deploy": "clasp deploy -i AKfycbyRSMVwxMkfi7-Wvyy2crjvwbuzKANXF76x2Q95im0R"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/google-apps-script": "^0.0.62",
+    "node-telegram-bot-api": "^0.30.0"
+  },
+  "dependencies": {
+    "@google/clasp": "^2.3.0"
+  }
+}
