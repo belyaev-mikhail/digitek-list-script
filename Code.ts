@@ -97,29 +97,29 @@ function insertStuff(who: string, what: string, howmuch: number) {
 
 // telegram stuff!
 
-var telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}`;
-var webAppUrl = `https://script.google.com/macros/s/${SCRIPT_ID}/exec`;
+const telegramUrl = () => `https://api.telegram.org/bot${BOT_TOKEN}`;
+const webAppUrl = () => `https://script.google.com/macros/s/${SCRIPT_ID}/exec`;
 
 function getMe() {
-  var url = `${telegramUrl}/getMe`;
+  var url = `${telegramUrl()}/getMe`;
   var response = UrlFetchApp.fetch(url);
   Logger.log(response.getContentText());
 }
 
 function setWebhook() {
-  var url = `${telegramUrl}/setWebhook?url=${webAppUrl}`;
+  var url = `${telegramUrl()}/setWebhook?url=${webAppUrl()}`;
   var response = UrlFetchApp.fetch(url);
   Logger.log(response.getContentText());
 }
 
 function sendText(id: number, text: string) {
-  var url = `${telegramUrl}/sendMessage?chat_id=${id}&text=${encodeURI(text)}`;
+  var url = `${telegramUrl()}/sendMessage?chat_id=${id}&text=${encodeURI(text)}`;
   var response = UrlFetchApp.fetch(url);
   Logger.log(response.getContentText());
 }
 
 function sendPhoto(id: number, addr: string, caption: string) {
-  var url = `${telegramUrl}/sendPhoto?chat_id=${id}&photo=${addr}&caption=${encodeURI(caption)}`;
+  var url = `${telegramUrl()}/sendPhoto?chat_id=${id}&photo=${addr}&caption=${encodeURI(caption)}`;
   var response = UrlFetchApp.fetch(url);
   Logger.log(response.getContentText());
 }
