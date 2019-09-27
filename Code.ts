@@ -4,8 +4,9 @@ import gas = GoogleAppsScript;
 import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import Message = tl.Message;
 import shlex from "./shlex";
-import {BOT_TOKEN, SCRIPT_ID} from "./secrets";
 
+declare var BOT_TOKEN : string;
+declare var SCRIPT_ID : string;
 
 function getSpreadsheetUrl() {
   return SpreadsheetApp.getActive().getUrl()
