@@ -92,7 +92,7 @@ function getLastRow() {
 function insertStuff(who: string, what: string, howmuch: number) {
   var range = getLastRow();
   range.setValues([[who, new Date(), what, howmuch]]);
-  onEdit({ range: range, value: "PLACEHOLDER" })
+  if(range.getRow() === 44) createNextDList();
 }
 
 // telegram stuff!
