@@ -133,7 +133,13 @@ var WHO_ARE_YOU = "https://i.imgur.com/pZSYRRW.jpg";
 
 function doPost(e) {
   var data = JSON.parse(e.postData.contents) as tl.Update;
-  if(data.message) handleMessage(data.message); // there are non-message updates at hooks
+  if(data.message) {// there are non-message updates at hooks
+      if(data.message.text.trim().indexOf('/dl') === 0) {
+          data.message.text = data.message.text.replace('/dl', '').trim();
+          handleMessage(data.message);
+      }
+      else if(data.message.chat.type === 'private') handleMessage(data.message);
+  }
 }
 
 function validateInt(s: string): number {
