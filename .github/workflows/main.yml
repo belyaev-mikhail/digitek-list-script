@@ -1,0 +1,25 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: secrets.sh
+      run: echo "${{ secrets.SECRETS_SH }}" >secrets.sh
+    - name: secrets.ts
+      run: echo "${{ secrets.SECRETS_TS }}" >secrets.ts
+    - name: clasp.json
+      run: echo '${{ secrets.CLASP_JSON }}' >.clasp.json
+    - name: login
+      run: echo '${{ secrets.CLASPRC_JSON }}' >$HOME/.clasprc.json 
+    - name: install
+      run: ./yarnw install >>/dev/null
+    - name: push
+      run: ./yarnw push >>/dev/null
+    - name: deploy
+      run: ./yarnw deploy >>/dev/null
