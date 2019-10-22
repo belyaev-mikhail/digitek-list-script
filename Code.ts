@@ -8,6 +8,8 @@ import shlex from "./shlex";
 declare var BOT_TOKEN : string;
 declare var SCRIPT_ID : string;
 
+const SIG = "@digiteklist_bot";
+
 function getSpreadsheetUrl() {
   return SpreadsheetApp.getActive().getUrl()
 }
@@ -149,7 +151,7 @@ function validateInt(s: string): number {
 }
 
 function handleMessage(m: Message) {
-  var text = m.text;
+  var text = m.text.replace(SIG, "");
   var id = m.chat.id;
   var userId = m.from.id;
 
