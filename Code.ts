@@ -75,11 +75,14 @@ function updateSummary() {
 function getLastSheet() {
   var result: Sheet;
   for (const it of SpreadsheetApp.getActiveSpreadsheet().getSheets()) {
-    if(it.getRange("A44").isBlank()) result = it
+    if(!it.getName().startsWith("DEBUG_") && it.getRange("A44").isBlank()) result = it
   }
   Logger.log(result.getName());
   return result
 }
+
+const getDebugSheet = () => SpreadsheetApp.getActiveSpreadsheet().getSheetByName("DEBUG_TG_LOG");
+
 
 function getLastRow() {
   var currentSheet = getLastSheet();
@@ -134,6 +137,7 @@ var UNKNOWN = "__UNKNOWN_USER__";
 var WHO_ARE_YOU = "https://i.imgur.com/pZSYRRW.jpg";
 
 function doPost(e) {
+  getDebugSheet().appendRow([e.postData.contents]);
   var data = JSON.parse(e.postData.contents) as tl.Update;
   if(data.message) {// there are non-message updates at hooks
       if(data.message.text.trim().indexOf('/dl') === 0) {
