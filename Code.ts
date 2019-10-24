@@ -75,7 +75,7 @@ function updateSummary() {
 function getLastSheet() {
   var result: Sheet;
   for (const it of SpreadsheetApp.getActiveSpreadsheet().getSheets()) {
-    if(!it.getName().startsWith("DEBUG_") && it.getRange("A44").isBlank()) result = it
+    if(!(it.getName().indexOf("DEBUG_") == 0) && it.getRange("A44").isBlank()) result = it
   }
   Logger.log(result.getName());
   return result
