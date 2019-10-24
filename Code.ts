@@ -81,6 +81,9 @@ function getLastSheet() {
   return result
 }
 
+const getDebugSheet = () => SpreadsheetApp.getActiveSpreadsheet().getSheetByName("TG_LOG");
+
+
 function getLastRow() {
   var currentSheet = getLastSheet();
   var listArea = currentSheet.getRange("A2:A44");
@@ -134,6 +137,7 @@ var UNKNOWN = "__UNKNOWN_USER__";
 var WHO_ARE_YOU = "https://i.imgur.com/pZSYRRW.jpg";
 
 function doPost(e) {
+  getDebugSheet().appendRow([e.postData.contents]);
   var data = JSON.parse(e.postData.contents) as tl.Update;
   if(data.message) {// there are non-message updates at hooks
       if(data.message.text.trim().indexOf('/dl') === 0) {
