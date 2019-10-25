@@ -165,8 +165,6 @@ function handleMessage(m: Message) {
   var id = m.chat.id;
   var userId = m.from.id;
 
-  sendText(id, "Думаю...");
-
   Logger.log("Message from " + userId + ":" + text);
 
   try {
